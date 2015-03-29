@@ -3,6 +3,18 @@ import re
 import sys
 import os
 
+"""
+command line parameter
+input_file output_file [-]tausends_of_seconds
+example:
+file.srt file_out.srt 3000
+shifted subtittles with 3 seconds forwards
+
+example:
+file.srt file_out.srt -1000
+shifted subtittles with 1 second backwards
+
+"""
 def timetext_to_tseconds(time_text):
     return (int(time_text[0:2])*3600 + int(time_text[3:5])*60 + int(time_text[6:8])) * 1000 + int(time_text[9:12])
 
