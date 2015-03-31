@@ -5,7 +5,7 @@ import os
 
 """
 command line parameter
-input_file output_file [-]tausends_of_seconds
+input_file output_file [-]tausends_of_seconds from_number
 example:
 file.srt file_out.srt 3000
 shifted subtittles with 3 seconds forwards
@@ -13,6 +13,10 @@ shifted subtittles with 3 seconds forwards
 example:
 file.srt file_out.srt -1000
 shifted subtittles with 1 second backwards
+
+example:
+file.srt file_out.srt -1000 150
+shifted subtittles with 1 second backwards sterting from number 150
 
 """
 def timetext_to_tseconds(time_text):
@@ -40,14 +44,20 @@ if os._exists(sys.argv[2]):
     os.remove(sys.argv[2])
 handle_out = open(sys.argv[2], "w")
 SHIFT = int(sys.argv[3])
+FROM = -1
 
+if len(sys.argv) == 5:
+    FROM = int(sys.argv[4])
+
+position = 0
 for lines in handle:
+    nn = re.findall('^\d+$', lines)
     mm = re.findall('\d\d:\d\d:\d\d\,\d\d\d', lines)
-    if len(mm) == 2:
+    if len(nn) == 1:
+        position = int(nn[0])
+    if len(mm) == 2 and position > FROM:
         shifted = bothshift(mm, SHIFT)
         handle_out.write(shifted[0] + ' --> ' + shifted[1] + '\n')
-        print shifted[0] + ' --> ' + shifted[1] + '\n'
     else:
-        print lines
         handle_out.write(lines)
 handle_out.close()
