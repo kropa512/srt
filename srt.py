@@ -55,9 +55,14 @@ for lines in handle:
     mm = re.findall('\d\d:\d\d:\d\d\,\d\d\d', lines)
     if len(nn) == 1:
         position = int(nn[0])
-    if len(mm) == 2 and position > FROM:
+    if len(mm) == 2 and position >= FROM:
         shifted = bothshift(mm, SHIFT)
         handle_out.write(shifted[0] + ' --> ' + shifted[1] + '\n')
     else:
         handle_out.write(lines)
 handle_out.close()
+
+os.close(handle.fileno())
+os.remove(sys.argv[1])
+os.renames(sys.argv[2], sys.argv[1])
+print "Fertig"
